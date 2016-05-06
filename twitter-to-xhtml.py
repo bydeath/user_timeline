@@ -43,16 +43,6 @@ imgs: %s
 """
 
 
-def Usage():
-    print 'Usage: %s [options] twitterid' % __file__
-    print
-    print '  This script fetches a users latest twitter update and stores'
-    print '  the result in a file as an XHTML fragment'
-    print
-    print '  Options:'
-    print '    --help -h : print this help'
-    print '    --output : the output file [default: stdout]'
-
 def generate_filename(N=8):
     import string
     import random
@@ -68,7 +58,7 @@ def media_download(url, path):
     with open(path, 'wb') as out:
         try:
             out.write(response.read())
-        except socket.timeout, e:
+        except socket.timeout as e:
             logger.warning(e)
             out.write(response.read())
 
