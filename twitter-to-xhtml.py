@@ -98,10 +98,10 @@ def generate_post_name():
     return "%s-%s.md" % (date, generate_filename())
 
 def main():
-    import tweet
+    import getapi
     since_id = 727783883920441344
     user = 'rangxiangzi'
-    api = tweet.getAPI()
+    api = getapi.getAPI()
     logger.debug(api)
     while True:
         since_id = FetchTwitter(api, user, since_id = since_id)
