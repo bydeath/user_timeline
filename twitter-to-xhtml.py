@@ -18,6 +18,7 @@ import os
 import logging
 import time
 import socket
+import getapi
 
 # FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig()
@@ -49,12 +50,15 @@ def generate_filename(N=8):
     return ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(N))
 
 def media_download(url, path):
-    import urllib2
+    # import urllib2
     # proxy = urllib2.ProxyHandler({'https':'127.0.0.1:8001'})
     # opener = urllib2.build_opener(proxy)
     # urllib2.install_opener(opener)
+    import urllib.request
+    request = urllib.request.Request(url)
+    response = urllib.request.urlopen(request)
     logger.debug(url)
-    response = urllib2.urlopen(url, timeout=10)
+    # response = urllib2.urlopen(url, timeout=10)
     with open(path, 'wb') as out:
         try:
             out.write(response.read())
@@ -86,6 +90,14 @@ def FetchTwitter(api, user, since_id):
             logger.debug("post just saved")
         return statuses[0].id
 
+def FetchStatus(api, id):
+    status = api.GetStatus(status_id=id)
+    return status
+
+def FetchOembedStatus(api, id):
+    data = api.GetStatusOembed(status_id=id)
+    return data
+
 def Save(xhtml, output):
     out = codecs.open(output, mode='w', encoding='ascii',
                       errors='xmlcharrefreplace')
@@ -98,7 +110,6 @@ def generate_post_name():
     return "%s-%s.md" % (date, generate_filename())
 
 def main():
-    import getapi
     since_id = 727783883920441344
     user = 'rangxiangzi'
     api = getapi.getAPI()
@@ -109,7 +120,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
-    # for i in range(50):
-        # media_download('http://pbs.twimg.com/media/ChnbrBAUkAAmttc.jpg', 'a.jpg')
-        # time.sleep(5)
+    # main()
+    api = getapi.getAPI()
+    status = FetchStatus(api, 728583447598370816)
+    print(status)
+    data = FetchOembedStatus(api, 728583447598370816)
+    print(data)

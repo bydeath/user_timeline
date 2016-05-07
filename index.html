@@ -4,34 +4,20 @@ layout: default
 
 <div class="home">
 
-  <ul class="post-list">
-    {% for post in site.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%-m月%-d日 %H:%M" }}</span>
-
-        <h3>
-          {{ post.content }}
-        </h3>
-
-        {% if post.imgs.size == 1 %}
-        <div>
-            <img src={{post.imgs[0]}}>
-        </div>
-        {% endif %}
-
-        {% if post.imgs.size == 2 %}
-            {% for img in post.imgs %}
-                <div class = div_inline>
-                    <img src={{img}}>
+    <ul class="post-list">
+        {% for post in site.posts %}
+        <li class="js-stream-item stream-item stream-item expanding-stream-item">
+            <div class="content">
+                <div  class ="tweet js-stream-tweet js-actionable-tweet js-profile-popup-actionable original-tweet js-original-tweet">
+                    <div class="js-tweet-text-container">
+                        <p class="TweetTextSize TweetTextSize--26px js-tweet-text tweet-text" lang="zh">{{post.content}}</p>
+                    </div>
                 </div>
-            {% endfor %}
-        {% endif %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
 
-
-      </li>
-    {% endfor %}
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
+    <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 
 </div>
