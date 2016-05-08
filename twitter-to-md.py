@@ -19,14 +19,15 @@ import logging
 import time
 import socket
 import getapi
+sys.path.append('../python-twitter/')
+import twitter
+from twitter import Status
 
 # FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig()
 logger = logging.getLogger('retweet')
 logger.setLevel(logging.DEBUG)
 
-sys.path.append('../python-twitter/')
-import twitter
 
 TEMPLATE = """
 <div class="twitter">
@@ -86,9 +87,13 @@ def FetchTwitter(api, user, since_id):
             logger.debug(imgs)
             xhtml = POST_TEMPLATE % (s.created_at, imgs, s.text)
             output = os.path.join('_posts', generate_post_name())
+            xhtml = _escape_vertical(xhtml)
             Save(xhtml, output)
             logger.debug("post just saved")
         return statuses[0].id
+
+def _escape_vertical(htmlStr):
+    return htmlStr.replace("||", "\|\|")
 
 def FetchStatus(api, id):
     status = api.GetStatus(status_id=id)
@@ -98,8 +103,12 @@ def FetchOembedStatus(api, id):
     data = api.GetStatusOembed(status_id=id)
     return data
 
+def save_json(str, output):
+    with open(output, 'w') as out:
+        out.write(str)
+    
 def Save(xhtml, output):
-    out = codecs.open(output, mode='w', encoding='ascii',
+    out = codecs.open(output, mode='w', encoding='utf-8',
                       errors='xmlcharrefreplace')
     out.write(xhtml)
     out.close()
@@ -111,7 +120,7 @@ def generate_post_name():
 
 def main():
     since_id = 727783883920441344
-    user = 'rangxiangzi'
+    user = 'fangshimin'
     api = getapi.getAPI()
     logger.debug(api)
     while True:
@@ -120,9 +129,15 @@ def main():
 
 
 if __name__ == "__main__":
-    # main()
-    api = getapi.getAPI()
-    status = FetchStatus(api, 728583447598370816)
-    print(status)
-    data = FetchOembedStatus(api, 728583447598370816)
-    print(data)
+    main()
+    # api = getapi.getAPI()
+    # status = FetchStatus(api, 728583447598370816)
+    # print(type(status))
+    # print(status)
+    # data = FetchOembedStatus(api, 728583447598370816)
+    # print(data)
+    # status = Status.AsJsonString(status)
+    # print(type(status))
+    # save_json(status, 'a.json')
+    # data = FetchOembedStatus(api, 728583447598370816)
+    # print(data)

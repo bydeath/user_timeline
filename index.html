@@ -8,9 +8,45 @@ layout: default
         {% for post in site.posts %}
         <li class="js-stream-item stream-item stream-item expanding-stream-item">
             <div class="content">
-                <div  class ="tweet js-stream-tweet js-actionable-tweet js-profile-popup-actionable original-tweet js-original-tweet">
-                    <div class="js-tweet-text-container">
-                        <p class="TweetTextSize TweetTextSize--26px js-tweet-text tweet-text" lang="zh">{{post.content}}</p>
+                <div class="stream-item-header">
+                    <a class="account-group js-account-group js-action-profile js-user-profile-link js-nav" href="index.html" data-user-id="232201624">
+                        <img class="avatar js-action-profile-avatar" src="/assets/2-0WdMOV_bigger.png" alt="">
+                        <strong class="fullname js-action-profile-name show-popup-with-id" data-aria-label-part="">方舟子</strong>
+                        <span>‏</span><span class="username js-action-profile-name" data-aria-label-part=""><s>@</s><b>fangshimin</b></span>
+
+                    </a>
+                    <div  class ="tweet js-stream-tweet js-actionable-tweet js-profile-popup-actionable original-tweet js-original-tweet">
+                        <div class="js-tweet-text-container">
+                            <p class="TweetTextSize TweetTextSize--26px js-tweet-text tweet-text" lang="zh">{{post.content}}</p>
+                        </div>
+                        {% if post.imgs %}
+                        <div class="AdaptiveMedia">
+                            <div class="AdaptiveMedia-container js-adaptive-media-container ">
+                                {% case post.imgs.size %}
+                                {% when 1 %}
+                                <div class="AdaptiveMedia-singlePhoto">
+                                    <div class="AdaptiveMedia-photoContainer js-adaptive-photo " data-image-url="https://pbs.twimg.com/media/ChvBXWfU4AE7ecH.jpg" data-element-context="platform_photo_card">
+                                        <img data-aria-label-part="" src={{post.imgs}} alt="" style="width: 100%; top: -0px;">
+                                    </div>
+                                </div>
+
+                                {% when 2 %}
+                                <div class="AdaptiveMedia-doublePhoto">
+                                    <div class="AdaptiveMedia-halfWidthPhoto">
+                                        <div class="AdaptiveMedia-photoContainer js-adaptive-photo " data-image-url="https://pbs.twimg.com/media/ChswMeWUkAAQyIU.jpg" data-element-context="platform_photo_card">
+                                            <img data-aria-label-part="" src={{post.imgs[0]}} alt="" style="height: 100%; left: -0px;">
+                                        </div>
+                                    </div>
+                                    <div class="AdaptiveMedia-halfWidthPhoto">
+                                        <div class="AdaptiveMedia-photoContainer js-adaptive-photo " data-image-url="https://pbs.twimg.com/media/ChswMeZUoAEtuFb.jpg" data-element-context="platform_photo_card">
+                                            <img data-aria-label-part="" src={{post.imgs[0]}} alt="" style="height: 100%; left: -5px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endcase %}
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
