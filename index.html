@@ -15,6 +15,9 @@ layout: default
                         <span>‏</span><span class="username js-action-profile-name" data-aria-label-part=""><s>@</s><b>fangshimin</b></span>
 
                     </a>
+                    <small class="time">
+                        <a href="index.html" class="tweet-timestamp js-permalink js-nav js-tooltip" data-original-title={{post.date}}><span class="_timestamp js-short-timestamp " data-aria-label-part="last" data-long-form="true">{{post.date|date:"%-H:%M:%S %-m.%-d "}}</span></a>
+                    </small>
                     <div  class ="tweet js-stream-tweet js-actionable-tweet js-profile-popup-actionable original-tweet js-original-tweet">
                         <div class="js-tweet-text-container">
                             <p class="TweetTextSize TweetTextSize--26px js-tweet-text tweet-text" lang="zh">{{post.content}}</p>
