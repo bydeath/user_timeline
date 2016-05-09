@@ -3,3 +3,6 @@ _site
 .jekyll-metadata
 _posts
 assets
+__pycache__
+*.pyc
+*.log

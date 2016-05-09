@@ -1,17 +1,13 @@
 #!/usr/bin/env python
 
-'''Post a message to twitter'''
+'''get twitter OAuth api and config option'''
 
-__author__ = 'dewitt@google.com'
 
 import configparser as ConfigParser
-import getopt
 import os
 import sys
 sys.path.append('../python-twitter/')
 import twitter
-
-
 
 
 class TweetRc(object):
@@ -48,21 +44,27 @@ class TweetRc(object):
             self._config.read(os.path.expanduser('~/.tweetrc'))
         return self._config
 
+
 def getAPI():
     rc = TweetRc()
     consumer_key = rc.GetConsumerKey()
     consumer_secret = rc.GetConsumerSecret()
     access_key = rc.GetAccessKey()
     access_secret = rc.GetAccessSecret()
-    if not consumer_key or not consumer_secret or not access_key or not access_secret:
+    if not consumer_key or \
+            not consumer_secret or not access_key or not access_secret:
         sys.exit(0)
-    api = twitter.Api(consumer_key=consumer_key, consumer_secret=consumer_secret,
-                      access_token_key=access_key, access_token_secret=access_secret, timeout=20)
+    api = twitter.Api(
+        consumer_key=consumer_key, consumer_secret=consumer_secret,
+        access_token_key=access_key, access_token_secret=access_secret,
+        timeout=20)
     return api
+
 
 def get_screen_name():
     rc = TweetRc()
     return rc.GetScreenName()
+
 
 def get_since_id():
     rc = TweetRc()
