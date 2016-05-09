@@ -18,24 +18,18 @@ import os
 import logging
 import time
 import socket
-import getapi
+import get_config
 sys.path.append('../python-twitter/')
 import twitter
 from twitter import Status
 
-# FORMAT = '%(asctime)-15s %(message)s'
-logging.basicConfig()
-logger = logging.getLogger('retweet')
-logger.setLevel(logging.DEBUG)
+FORMAT = '%(asctime)s %(message)s'
+DATEFMT = '%m/%d/%Y %H:%M:%S'
+logging.basicConfig(format=FORMAT, datefmt=DATEFMT)
+logger = logging.getLogger('user_timeline')
+logger.setLevel(logging.INFO)
 
 
-TEMPLATE = """
-<div class="twitter">
-  <span class="twitter-user"><a href="http://twitter.com/%s">Twitter</a>: </span>
-  <span class="twitter-text">%s</span>
-  <span class="twitter-relative-created-at"><a href="http://twitter.com/%s/statuses/%s">Posted %s</a></span>
-</div>
-"""
 
 POST_TEMPLATE = """---
 date: %s
@@ -70,7 +64,7 @@ def media_download(url, path):
 def FetchTwitter(api, user, since_id):
     logger.debug("since_id:%s"%since_id)
     statuses = api.GetUserTimeline(screen_name=user, since_id=since_id)
-    logger.info("get % status"%len(statuses))
+    logger.info("get %s status"%len(statuses))
     if len(statuses) == 0:
         return since_id
     else:
@@ -85,12 +79,21 @@ def FetchTwitter(api, user, since_id):
                     media_download(url, filename)
                     imgs.append(filename)
             logger.debug(imgs)
-            xhtml = POST_TEMPLATE % (s.created_at, imgs, s.text)
+            wraped_link_text = _wrap_links_intext(s)
+            xhtml = POST_TEMPLATE % (s.created_at, imgs, wraped_link_text)
             output = os.path.join('_posts', generate_post_name())
             xhtml = _escape_vertical(xhtml)
             Save(xhtml, output)
             logger.debug("post just saved")
         return statuses[0].id
+
+def _wrap_links_intext(status):
+    text = status.text
+    for url in status.urls:
+        wraped_link = '<a href="%s">%s</a>'%(url.expanded_url, url.url)
+        text = text.replace(url.url, wraped_link)
+    return text
+
 
 def _escape_vertical(htmlStr):
     return htmlStr.replace("||", "\|\|")
@@ -119,21 +122,27 @@ def generate_post_name():
     return "%s-%s.md" % (date, generate_filename())
 
 def main():
-    since_id = 727783883920441344
-    user = 'fangshimin'
-    api = getapi.getAPI()
+    screen_name = get_config.get_screen_name()
+    since_id = get_config.get_since_id()
+    api = get_config.getAPI()
     logger.debug(api)
     while True:
-        since_id = FetchTwitter(api, user, since_id = since_id)
+        since_id = FetchTwitter(api, screen_name, since_id = since_id)
         time.sleep(30)
 
 
 if __name__ == "__main__":
     main()
     # api = getapi.getAPI()
-    # status = FetchStatus(api, 728583447598370816)
+    # status = FetchStatus(api, 729184024493576193)
     # print(type(status))
     # print(status)
+    # status = FetchStatus(api, 729501254087495681)
+    # print(type(status))
+    # print(status)
+    # status = FetchStatus(api, 728785179053973504)
+    # print(status)
+    # print(_wrap_links_intext(status))
     # data = FetchOembedStatus(api, 728583447598370816)
     # print(data)
     # status = Status.AsJsonString(status)

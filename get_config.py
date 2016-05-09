@@ -30,6 +30,12 @@ class TweetRc(object):
     def GetAccessSecret(self):
         return self._GetOption('access_secret')
 
+    def GetScreenName(self):
+        return self._GetOption('screen_name')
+
+    def GetSinceId(self):
+        return self._GetOption('since_id')
+
     def _GetOption(self, option):
         try:
             return self._GetConfig().get('Tweet', option)
@@ -53,3 +59,11 @@ def getAPI():
     api = twitter.Api(consumer_key=consumer_key, consumer_secret=consumer_secret,
                       access_token_key=access_key, access_token_secret=access_secret, timeout=20)
     return api
+
+def get_screen_name():
+    rc = TweetRc()
+    return rc.GetScreenName()
+
+def get_since_id():
+    rc = TweetRc()
+    return int(rc.GetSinceId())
