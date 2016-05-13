@@ -70,9 +70,9 @@ def FetchTwitter(api, user, since_id):
                 for m in medias:
                     url = m.media_url
                     filename = os.path.join(
-                            "/assets", ''.join([generate_filename(), '.jpg']))
+                            "assets", ''.join([generate_filename(), '.jpg']))
                     media_download(url, filename)
-                    imgs.append(filename)
+                    imgs.append(''.join(['/', filename]))
             logger.debug(imgs)
             wraped_link_text = _wrap_links_intext(s)
             xhtml = POST_TEMPLATE % (s.created_at, imgs, wraped_link_text)
