@@ -122,15 +122,44 @@ def generate_post_name():
     date = strftime("%Y-%m-%d-%H-%M-%S", gmtime())
     return "%s-%s.md" % (date, generate_filename())
 
+def get_many_statuses(api, screen_name, max_id, since_id):
+    while max_id > since_id:
+        statuses = api.GetUserTimeline(screen_name=screen_name, max_id=max_id, since_id=since_id, count=4)
+        logger.info("get %s status" % len(statuses))
+        if len(statuses) == 0:
+            return since_id
+        else:
+            for s in statuses:
+                logger.debug(s.id)
+                medias = s.media
+                imgs = []
+                if medias:
+                    for m in medias:
+                        url = m.media_url
+                        filename = os.path.join(
+                                "assets", ''.join([generate_filename(), '.jpg']))
+                        media_download(url, filename)
+                        imgs.append(''.join(['/', filename]))
+                logger.debug(imgs)
+                wraped_link_text = _wrap_links_intext(s)
+                xhtml = POST_TEMPLATE % (s.created_at, imgs, wraped_link_text)
+                output = os.path.join('_posts', generate_post_name())
+                xhtml = _escape_vertical(xhtml)
+                Save(xhtml, output)
+                logger.debug("post just saved")
+            max_id = statuses[-1].id - 1
+            logger.info("from %s to %s" %(statuses[-1].id, statuses[0].id))
+
 
 def main():
     screen_name = get_config.get_screen_name()
     since_id = get_config.get_since_id()
     api = get_config.getAPI()
     logger.debug(api)
-    while True:
-        since_id = FetchTwitter(api, screen_name, since_id=since_id)
-        time.sleep(30)
+    get_many_statuses(api, screen_name, max_id = max_id, since_id = since_id)
+    # while True:
+        # since_id = FetchTwitter(api, screen_name, since_id=since_id)
+        # time.sleep(30)
 
 
 if __name__ == "__main__":
