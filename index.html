@@ -5,18 +5,18 @@ layout: default
 <div class="home">
 
     <ul class="post-list">
-        {% for post in site.posts %}
+        {% for post in paginator.posts %}
         <li class="js-stream-item stream-item stream-item expanding-stream-item">
             <div class="content">
                 <div class="stream-item-header">
-                    <a class="account-group js-account-group js-action-profile js-user-profile-link js-nav" href="index.html" data-user-id="232201624">
+                    <a class="account-group js-account-group js-action-profile js-user-profile-link js-nav" href="/" data-user-id="232201624">
                         <img class="avatar js-action-profile-avatar" src="/assets/2-0WdMOV_bigger.png" alt="">
                         <strong class="fullname js-action-profile-name show-popup-with-id" data-aria-label-part="">方舟子</strong>
                         <span>‏</span><span class="username js-action-profile-name" data-aria-label-part=""><s>@</s><b>fangshimin</b></span>
 
                     </a>
                     <small class="time">
-                        <a href="index.html" class="tweet-timestamp js-permalink js-nav js-tooltip" data-original-title={{post.date}}><span class="_timestamp js-short-timestamp " data-aria-label-part="last" data-long-form="true">{{post.date|date:"%-H:%M:%S %-m.%-d "}}</span></a>
+                        <a href="/" class="tweet-timestamp js-permalink js-nav js-tooltip" data-original-title={{post.date}}><span class="_timestamp js-short-timestamp " data-aria-label-part="last" data-long-form="true">{{post.date|date:"%-H:%M:%S %-m.%-d "}}</span></a>
                     </small>
                     <div  class ="tweet js-stream-tweet js-actionable-tweet js-profile-popup-actionable original-tweet js-original-tweet">
                         <div class="js-tweet-text-container">
@@ -55,5 +55,30 @@ layout: default
             </div>
         </li>
         {% endfor %}
+        {% if paginator.total_pages > 1 %}
+        <div class="pagination">
+            {% if paginator.previous_page %}
+            <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&laquo; Prev</a>
+            {% else %}
+            <span>&laquo; Prev</span>
+            {% endif %}
+
+            {% for page in (1..paginator.total_pages) %}
+            {% if page == paginator.page %}
+            <em>{{ page }}</em>
+            {% elsif page == 1 %}
+            <a href="/">{{ page }}</a>
+            {% else %}
+            <a href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}">{{ page }}</a>
+            {% endif %}
+            {% endfor %}
+
+            {% if paginator.next_page %}
+            <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Next &raquo;</a>
+            {% else %}
+            <span>Next &raquo;</span>
+            {% endif %}
+        </div>
+        {% endif %}
     </ul>
 </div>
