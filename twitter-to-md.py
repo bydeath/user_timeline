@@ -70,7 +70,7 @@ def FetchTwitter(api, user, since_id):
                 for m in medias:
                     url = m.media_url
                     filename = os.path.join(
-                            "assets", ''.join([generate_filename(), '.jpg']))
+                            "/assets", ''.join([generate_filename(), '.jpg']))
                     media_download(url, filename)
                     imgs.append(filename)
             logger.debug(imgs)
