@@ -156,10 +156,9 @@ def main():
     since_id = get_config.get_since_id()
     api = get_config.getAPI()
     logger.debug(api)
-    get_many_statuses(api, screen_name, max_id = max_id, since_id = since_id)
-    # while True:
-        # since_id = FetchTwitter(api, screen_name, since_id=since_id)
-        # time.sleep(30)
+    while True:
+        since_id = FetchTwitter(api, screen_name, since_id=since_id)
+        time.sleep(30)
 
 
 if __name__ == "__main__":
