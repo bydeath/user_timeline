@@ -18,5 +18,5 @@ timezone: Asia/Shanghai
 markdown: kramdown
 gems :
   - jekyll-paginate
-paginate: 5
+paginate: 15
 paginate_path: "/post/page:num"
